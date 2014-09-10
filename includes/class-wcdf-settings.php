@@ -6,7 +6,7 @@
  * @subpackage WooCommerce_Doofinder
  * @author Doofinder
  * @category Admin
- * @version 0.1.1
+ * @version 0.1.2
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
@@ -49,11 +49,11 @@ class WC_Doofinder_Settings extends WC_Settings_Page
                 'desc'    => '',
                 'id'      => 'woocommerce_doofinder_layer_enabled',
                 'type'    => 'checkbox',
-                'default' => 'yes',
+                'default' => 'no',
             ),
             array(
                 'title'   => __( 'Layer Javascript Code', 'woocommerce-doofinder' ),
-                'desc'    => __( 'Paste here the Javascript code you will find inside <em><strong>Configuration > Installation Scripts > Doofinder Layer</strong></em> in your <a href="https://app.doofinder.com/admin/config/scripts/" target="_blank">Doofinder Control Panel</a>.', 'woocommerce-doofinder' ),
+                'desc'    => __( 'Paste here the Javascript code you will find inside <em><strong>Configuration &gt; Installation Scripts &gt; Doofinder Layer</strong></em> in your <a href="https://app.doofinder.com/admin/config/scripts/" target="_blank">Doofinder Control Panel</a>.', 'woocommerce-doofinder' ),
                 'id'      => 'woocommerce_doofinder_layer_code',
                 'css'     => 'margin-top: 5px; width: 100%; height: 500px; font-family: Consolas,Monaco,monospace;',
                 'type'    => 'textarea',

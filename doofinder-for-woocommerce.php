@@ -3,13 +3,13 @@
  * Plugin Name: Doofinder for WooCommerce
  * Plugin URI: https://github.com/doofinder/woocommerce-doofinder
  * Description: Integrate Doofinder in your WooCommerce site with almost no effort.
- * Version: 0.1.1
+ * Version: 0.1.2
  * Author: Doofinder <support@doofinder.com>
  * Author URI: http://www.doofinder.com
  * License: GPLv2
  *
  * Requires at least: 3.8
- * Tested up to: 3.9
+ * Tested up to: 4.0
  *
  * @package WordPress
  * @subpackage WooCommerce_Doofinder
@@ -29,22 +29,14 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
      * Main Plugin Class
      *
      * @class WC_Doofinder
-     * @version 0.1.1
+     * @version 0.1.2
      */
     class WC_Doofinder {
 
         /**
          * @var string
          */
-        public $version = '0.1.1';
-
-        /**
-         * Object that processes the requests to the plugin and provides proper
-         * responses.
-         *
-         * @var WC_Doofinder_Router
-         */
-        public $router = null;
+        public $version = '0.1.2';
 
         /** Main Instance *****************************************************/
 
@@ -99,14 +91,16 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
          */
         public function __construct()
         {
+
             // auto-load classes on demand
             if ( function_exists( "__autoload" ) ) {
                 spl_autoload_register( "__autoload" );
             }
             spl_autoload_register( array( $this, 'autoload' ) );
 
-            // create the router
-            $this->router = new WC_Doofinder_Router();
+            add_action( 'init', array( __CLASS__, 'add_routes' ) );
+
+            define('WC_DOOFINDER_FEED_NAME', 'doofinder');
 
             if ( is_admin() ) {
                 // add the settings page to the WooCommerce settings tabs
@@ -116,7 +110,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
                 // to ensure that the search box has been rendered
                 add_action( 'wp_footer', array( $this, 'output_doofinder_layer_code' ) );
             }
-
         }
 
         /**
@@ -131,12 +124,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
             $file = str_replace('wc_doofinder', 'wcdf', $classname);
             $file = 'class-' . str_replace( '_', '-', $file ) . '.php';
             $path = $this->plugin_path() . '/includes/';
-
-            $classname_len = strlen( $classname );
-
-            if ( strpos( $classname, '_response') == $classname_len - 9 ) {
-                $path = $path . 'responses/';
-            }
 
             if ( is_readable( $path . $file ) ) {
                 include_once( $path . $file );
@@ -181,6 +168,22 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
         /** Plugin (De)Activation Stuff ***************************************/
 
+        public static function add_routes()
+        {
+            add_feed( WC_DOOFINDER_FEED_NAME, array( __CLASS__, 'load_feed_template' ) );
+            add_feed( WC_DOOFINDER_FEED_NAME . '-config', array( __CLASS__, 'load_feed_config_template' ) );
+        }
+
+        public static function load_feed_template()
+        {
+            load_template( plugin_dir_path( __FILE__ ) . 'templates/feed.php' );
+        }
+
+        public static function load_feed_config_template()
+        {
+            load_template( plugin_dir_path( __FILE__ ) . 'templates/config.php' );
+        }
+
         /**
          * Activation Hook to configure routes and so on
          *
@@ -188,10 +191,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
          */
         public static function plugin_enabled()
         {
-            if ( ! current_user_can( 'activate_plugins' ) )
-                return;
-
-            WC_Doofinder_Router::configure_routes();
+            self::add_routes();
+            flush_rewrite_rules();
         }
 
         /**
@@ -201,10 +202,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
          */
         public static function plugin_disabled()
         {
-            if ( ! current_user_can( 'activate_plugins' ) )
-                return;
-
-            WC_Doofinder_Router::flush_routes();
+            flush_rewrite_rules();
+            delete_option('woocommerce_doofinder_layer_code');
+            delete_option('woocommerce_doofinder_layer_enabled');
         }
 
     } // WC_Doofinder
@@ -215,6 +215,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 // Plugin activation/deactivation
 register_activation_hook( __FILE__, array( 'WC_Doofinder', 'plugin_enabled' ) );
 register_deactivation_hook( __FILE__, array( 'WC_Doofinder', 'plugin_disabled' ) );
+
+add_action( 'plugins_loaded', array( 'WC_Doofinder', 'instance' ), 0 );
 
 function WCDoofinder()
 {

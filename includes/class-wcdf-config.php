@@ -1,30 +1,22 @@
 <?php
 /**
- * Class that exposes JSON configuration info for Doofinder
+ * Config class for Doofinder for WooCommerce
  *
  * @package WordPress
  * @subpackage WooCommerce_Doofinder
  * @author Doofinder
- * @category Core
- * @version 0.1.1
+ * @category Admin
+ * @version 0.1.2
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-/**
- * WC_Doofinder_Config_Response
- */
-class WC_Doofinder_Config_Response extends WC_Doofinder_Base_Response {
+if ( ! class_exists( 'WC_Doofinder_Config' ) ) :
 
-    /**
-     * Serves the request directly to the output.
-     *
-     * @return void
-     */
-    public function serve_request()
+class WC_Doofinder_Config {
+
+    public function render()
     {
-        $this->send_header('Content-Type', 'application/json; charset=utf-8');
-
         $language = strtoupper( substr( get_locale(), 0, 2 ) );
 
         $configuration = array(
@@ -34,7 +26,7 @@ class WC_Doofinder_Config_Response extends WC_Doofinder_Base_Response {
                 ),
             'module' => array(
                 'version' => WCDoofinder()->version,
-                'feed' => WCDoofinder()->router->get_request_url( 'products' ),
+                'feed' => get_feed_link(WC_DOOFINDER_FEED_NAME),
                 'options' => array(
                     'language' => array($language),
                     'currency' => array_keys( get_woocommerce_currencies() ),
@@ -51,7 +43,8 @@ class WC_Doofinder_Config_Response extends WC_Doofinder_Base_Response {
                 ),
             );
 
-        echo json_encode( $configuration );
+        return json_encode( $configuration );
     }
-
 }
+
+endif;
