@@ -97,6 +97,9 @@ Just send your questions to <mailto:support@doofinder.com> and we will try to an
 
 == Changelog ==
 
+= 0.1.2 =
+Some bugfixes. Improved feed generation. Fixed a weird error with URL routes.
+
 = 0.1 =
 First usable version.
 
