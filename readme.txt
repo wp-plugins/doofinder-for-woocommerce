@@ -68,15 +68,11 @@ At this point you should be able to feed Doofinder with your store data through 
 
 If your WordPress installation has permalinks (URL rewriting) enabled then your feed URL will look like this:
 
-    http://www.your-site-domain.com/doofinder/woocommerce/products
-
-In other case it will look like this:
-
-    http://www.your-site-domain.com/?df-wc-route=products
+    http://www.your-site-domain.com/feed/doofinder/
 
 __Notice:__ If WordPress is not installed at the root of your site then you will have to setup the URL accordingly. In the following example WordPress is installed inside a `/blog` folder:
 
-    http://www.your-site-domain.com/blog/doofinder/woocommerce/products
+    http://www.your-site-domain.com/blog/feed/doofinder/
 
 = The Doofinder Layer =
 
