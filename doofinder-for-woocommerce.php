@@ -3,7 +3,7 @@
  * Plugin Name: Doofinder for WooCommerce
  * Plugin URI: https://github.com/doofinder/woocommerce-doofinder
  * Description: Integrate Doofinder in your WooCommerce site with almost no effort.
- * Version: 0.1.2
+ * Version: 0.1.3
  * Author: Doofinder <support@doofinder.com>
  * Author URI: http://www.doofinder.com
  * License: GPLv2
@@ -29,14 +29,14 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
      * Main Plugin Class
      *
      * @class WC_Doofinder
-     * @version 0.1.2
+     * @version 0.1.3
      */
     class WC_Doofinder {
 
         /**
          * @var string
          */
-        public $version = '0.1.2';
+        public $version = '0.1.3';
 
         /** Main Instance *****************************************************/
 
