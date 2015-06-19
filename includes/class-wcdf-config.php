@@ -6,7 +6,7 @@
  * @subpackage WooCommerce_Doofinder
  * @author Doofinder
  * @category Admin
- * @version 0.1.3
+ * @version 0.1.4
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly

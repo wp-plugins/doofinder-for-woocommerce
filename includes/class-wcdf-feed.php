@@ -6,7 +6,7 @@
  * @subpackage WooCommerce_Doofinder
  * @author Doofinder
  * @category Admin
- * @version 0.1.3
+ * @version 0.1.4
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
@@ -126,9 +126,13 @@ class WC_Doofinder_Feed {
     private function getCategories($id)
     {
         $paths = array();
-        foreach( get_the_terms( $id, 'product_cat' ) as $term )
+        $terms = get_the_terms( $id, 'product_cat' );
+        if (is_array( $terms ))
         {
-            $paths[] = $this->getCategoryPath( $term );
+            foreach( $terms as $term )
+            {
+                $paths[] = $this->getCategoryPath( $term );
+            }
         }
         $this->cleanPaths( $paths );
 
